@@ -1,5 +1,7 @@
 # 趋势动物 · A股趋势信号
 
+线上页面：<https://panhaoneo.github.io/TrendAnimal/>
+
 每日浏览趋势动物 A股“温转热”买入候选与“立秋（温转平）”卖出信号的静态看板，自动更新并部署到 GitHub Pages。
 
 - 买入候选：`温转热(A股)` 榜单，按 A股本地趋势相对强度 `trendStrengthLocalCurr` 从高到低排序。
