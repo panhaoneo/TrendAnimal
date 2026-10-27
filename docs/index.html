@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="趋势动物 A股每日趋势信号：温转热买入候选与立秋（温转平）卖出信号，按趋势相对强度排序。">
+  <title>趋势动物 · A股趋势信号</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <header class="site-header">
+    <div class="topbar">
+      <a class="brand" href="./">
+        <span class="brand-mark" aria-hidden="true">趋</span>
+        <span class="brand-text">
+          <strong>趋势动物</strong>
+          <small>A股趋势信号</small>
+        </span>
+      </a>
+      <nav class="nav" aria-label="页面导航">
+        <a href="#buy">买入候选</a>
+        <a href="#sell">卖出信号</a>
+        <a href="#notes">口径说明</a>
+      </nav>
+    </div>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="kicker">TREND ANIMAL · DAILY SIGNALS</p>
+        <h1>每日趋势标的<span class="accent">.</span></h1>
+        <p class="lede">温转热找买点，立秋提示右侧结束。先看温度，再看相对强度。</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#buy">查看买入候选</a>
+          <a class="button button-ghost" href="#sell">查看卖出信号</a>
+        </div>
+      </div>
+      <div class="date-panel" aria-label="数据日期信息">
+        <span class="date-panel-label">数据日期</span>
+        <strong id="heroDate">—</strong>
+        <span class="date-panel-meta" id="heroStatus">正在载入…</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="staleBanner" class="banner" role="status" hidden></div>
+
+  <main id="main">
+    <section class="stats" aria-label="今日概览">
+      <article class="stat stat-buy">
+        <span class="stat-label">买入候选</span>
+        <strong id="buyCount">—</strong>
+        <span class="stat-note">温转热 · 按相对强度排序</span>
+      </article>
+      <article class="stat stat-sell">
+        <span class="stat-label">卖出信号</span>
+        <strong id="sellCount">—</strong>
+        <span class="stat-note">立秋 · 多数为温转平</span>
+      </article>
+      <article class="stat stat-date">
+        <span class="stat-label">数据更新</span>
+        <strong id="statDate">—</strong>
+        <span class="stat-note" id="statTime">—</span>
+      </article>
+    </section>
+
+    <div class="toolbar">
+      <div class="search">
+        <label for="filterInput">筛选</label>
+        <input id="filterInput" type="search" placeholder="输入名称或代码，如 农业银行 / 601288" autocomplete="off" spellcheck="false">
+        <button id="clearFilter" class="clear-filter" type="button" hidden>清除</button>
+      </div>
+      <button id="refreshButton" class="button button-small" type="button">刷新数据</button>
+    </div>
+
+    <section id="buy" class="signal-section" aria-labelledby="buyTitle">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">BUY CANDIDATES</p>
+          <h2 id="buyTitle">买入候选 <span class="title-tag buy-tag">温转热</span></h2>
+          <p class="section-desc">温转热榜单成员，按 A股本地趋势相对强度从高到低排列。温度变化、节气与右侧状态用于复核。</p>
+        </div>
+        <div class="section-side">
+          <span class="count-pill" id="buyVisible">—</span>
+          <span class="sort-hint" id="buySortHint">相对强度降序</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="signal-table buy-table">
+          <thead>
+            <tr>
+              <th class="col-rank" scope="col">#</th>
+              <th scope="col"><button type="button" class="sort-button" data-table="buy" data-key="name" data-type="string">名称 / 代码</button></th>
+              <th scope="col" class="num"><button type="button" class="sort-button" data-table="buy" data-key="price" data-type="number">最新价</button></th>
+              <th scope="col" class="num"><button type="button" class="sort-button" data-table="buy" data-key="dayChangePct" data-type="number">当日涨跌</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="buy" data-key="tempChange" data-type="string">温度变化</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="buy" data-key="phase" data-type="string">节气</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="buy" data-key="strength" data-type="number">相对强度</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="buy" data-key="strengthChange" data-type="string">强度变化</button></th>
+              <th scope="col">状态</th>
+            </tr>
+          </thead>
+          <tbody id="buyBody"></tbody>
+        </table>
+        <p class="empty" id="buyEmpty" hidden>没有符合筛选条件的买入候选。</p>
+      </div>
+    </section>
+
+    <section id="sell" class="signal-section" aria-labelledby="sellTitle">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">EXIT SIGNALS</p>
+          <h2 id="sellTitle">卖出信号 <span class="title-tag sell-tag">立秋 · 温转平</span></h2>
+          <p class="section-desc">立秋代表右侧结束。榜单成员多为温→平，也包含少量热→平、沸→平；默认按当日跌幅从大到小排列，便于优先复核。</p>
+        </div>
+        <div class="section-side">
+          <span class="count-pill" id="sellVisible">—</span>
+          <span class="sort-hint" id="sellSortHint">当日涨跌幅升序</span>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="signal-table sell-table">
+          <thead>
+            <tr>
+              <th class="col-rank" scope="col">#</th>
+              <th scope="col"><button type="button" class="sort-button" data-table="sell" data-key="name" data-type="string">名称 / 代码</button></th>
+              <th scope="col" class="num"><button type="button" class="sort-button" data-table="sell" data-key="price" data-type="number">最新价</button></th>
+              <th scope="col" class="num"><button type="button" class="sort-button" data-table="sell" data-key="dayChangePct" data-type="number">当日涨跌</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="sell" data-key="tempChange" data-type="string">温度变化</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="sell" data-key="phase" data-type="string">节气</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="sell" data-key="strength" data-type="number">相对强度</button></th>
+              <th scope="col"><button type="button" class="sort-button" data-table="sell" data-key="strengthChange" data-type="string">强度变化</button></th>
+              <th scope="col">状态</th>
+            </tr>
+          </thead>
+          <tbody id="sellBody"></tbody>
+        </table>
+        <p class="empty" id="sellEmpty" hidden>没有符合筛选条件的卖出标的。</p>
+      </div>
+    </section>
+
+    <section id="notes" class="notes" aria-labelledby="notesTitle">
+      <div class="section-head">
+        <div>
+          <p class="section-kicker">METHODOLOGY</p>
+          <h2 id="notesTitle">口径说明</h2>
+          <p class="section-desc">接口事实、页面计算与策略含义分开看，避免把榜单当作机械买卖指令。</p>
+        </div>
+      </div>
+      <div class="note-grid">
+        <article class="note-card">
+          <h3>温转热</h3>
+          <p>榜单标签不只包含狭义的“温→热”，还可能包含温→沸、平→热、首次进入右侧或右侧延续中的再次升温，适合发现候选，严格策略应再用字段确认。</p>
+        </article>
+        <article class="note-card">
+          <h3>立秋 · 温转平</h3>
+          <p>立秋表示右侧趋势结束。实测榜单中绝大多数成员为温→平，也含少量热→平、沸→平；页面如实展示每只标的的温度变化。</p>
+        </article>
+        <article class="note-card">
+          <h3>相对强度</h3>
+          <p>0–100 的 A股池内趋势相对位次，越高表示近期趋势越强。它不是涨跌幅，也不是上涨概率；分数高不等于未来一定上涨。</p>
+        </article>
+        <article class="note-card">
+          <h3>数据与计算</h3>
+          <p>行情、温度、节气、强度均来自趋势动物 API。当日涨跌幅由接口 <code>roc</code> 小数比值乘以 100 计算；缺失字段显示“—”，不补值。</p>
+        </article>
+      </div>
+
+      <div class="meta-box">
+        <div class="meta-row"><span>数据来源</span><strong id="metaSource">趋势动物 API</strong></div>
+        <div class="meta-row"><span>本次估算费用</span><strong id="metaCost">—</strong></div>
+        <div class="meta-row"><span>覆盖与缺失</span><strong id="metaCoverage">—</strong></div>
+        <div class="meta-row"><span>页面生成时间</span><strong id="metaGenerated">—</strong></div>
+      </div>
+
+      <p class="disclaimer">
+        本页面仅用于个人观察与记录，所有指标和分析结果仅供参考，不构成任何投资建议。趋势动物 API
+        数据可能存在延迟或缺失，交易盈亏由用户自行承担。
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>趋势动物 · A股趋势信号</span>
+    <span id="footerDate">—</span>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>

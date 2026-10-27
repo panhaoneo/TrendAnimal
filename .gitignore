@@ -1,0 +1,7 @@
+# 本地密钥与本地产物，禁止提交
+API_KEY
+.env
+.cache/
+__pycache__/
+*.pyc
+.DS_Store

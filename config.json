@@ -1,0 +1,26 @@
+{
+  "asset": "A股",
+  "lists": {
+    "buy": {
+      "tmId": 622466,
+      "name": "温转热(A股)",
+      "description": "温转热标签包含温→热、温→沸、平→热及右侧延续再升温等情形，是候选发现榜单。"
+    },
+    "sell": {
+      "tmId": 621866,
+      "name": "立秋(A股)",
+      "description": "趋势节气立秋，代表右侧结束；实测成员绝大多数为温→平，也含少量热→平、沸→平。"
+    }
+  },
+  "fields": [
+    "priceIndex",
+    "roc",
+    "isTrendRightSide",
+    "trendTemperatureCurr",
+    "trendTemperaturePrev",
+    "trendPhaseCurr",
+    "trendStrengthLocalCurr",
+    "trendStrengthLocalChange"
+  ],
+  "output": "docs/data.json"
+}
