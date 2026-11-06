@@ -1,9 +1,9 @@
 name: Update trend data and deploy
 
 on:
-  schedule:
-    # 16:10 北京时间，交易日更新后抓取；脚本内部会轮询免费状态等待数据刷新
-    - cron: "10 8 * * 1-5"
+  # 每日定时更新已关闭；如需恢复，取消下面两行注释
+  # schedule:
+  #   - cron: "10 8 * * 1-5"
   workflow_dispatch:
 
 permissions:

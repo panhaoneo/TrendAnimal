@@ -2,7 +2,7 @@
 
 线上页面：<https://panhaoneo.github.io/TrendAnimal/>
 
-每日浏览趋势动物 A股“温转热”买入候选与“立秋（温转平）”卖出信号的静态看板，自动更新并部署到 GitHub Pages。
+每日浏览趋势动物 A股“温转热”买入候选与“立秋（温转平）”卖出信号的静态看板，支持手动触发更新并部署到 GitHub Pages。
 
 - 买入候选：`温转热(A股)` 榜单，按 A股本地趋势相对强度 `trendStrengthLocalCurr` 从高到低排序。
 - 卖出信号：`立秋(A股)` 榜单（右侧结束），实测成员绝大多数为温→平，也含少量热→平、沸→平；默认按当日涨跌幅升序，跌幅大的在前。
@@ -21,7 +21,7 @@ docs/
 scripts/
   fetch_data.py 抓取榜单成分与快照，生成 docs/data.json
 config.json     榜单 tmId、请求字段与输出路径
-.github/workflows/update.yml  定时抓取、提交数据并部署 Pages
+.github/workflows/update.yml  抓取、提交数据并部署 Pages（手动触发）
 ```
 
 ## 本地运行
@@ -76,7 +76,9 @@ gh api --method POST repos/OWNER/TrendAnimal/pages -f build_type=workflow
 gh workflow run update.yml --repo OWNER/TrendAnimal
 ```
 
-工作流在交易日北京时间 16:10 运行，最多等待 30 分钟直到 A股数据日期更新；抓取成功后提交 `docs/data.json` 并部署 `docs/`。也可在 Actions 页面手动执行。
+每日定时更新已关闭。需要更新数据时，在 GitHub Actions 页面手动执行 `update.yml`，会抓取最新数据、提交 `docs/data.json` 并部署 `docs/`。
+
+如需恢复每日北京时间 16:10 自动运行，取消 `.github/workflows/update.yml` 中 `schedule` 两行的注释并推送即可。
 
 若使用私有仓库，GitHub Pages 需要账户支持私有仓库发布；公开仓库无需额外条件。
 
